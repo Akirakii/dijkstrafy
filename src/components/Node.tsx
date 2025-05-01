@@ -7,11 +7,22 @@ interface NodeProps {
     isDeleting: boolean;
     isStart: boolean;
     isEnd: boolean;
+    onMouseDown: () => void;
+    onMouseUp: () => void;
 }
 
-const NodeComponent: React.FC<NodeProps> = ({ node, isDeleting, isStart, isEnd }) => {
+const NodeComponent: React.FC<NodeProps> = ({
+    node,
+    isDeleting,
+    isStart,
+    isEnd,
+    onMouseDown,
+    onMouseUp,
+}) => {
     return (
         <div
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
             className={`
             graph-node 
             ${isDeleting ? 'delete-mode' : ''}

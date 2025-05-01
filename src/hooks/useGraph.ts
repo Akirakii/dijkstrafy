@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Graph, GraphConfig, Node } from '../types/graphTypes';
+import { DragState, Edge, Graph, GraphConfig, Node } from '../types/graphTypes';
 
 export const useGraph = () => {
     const [graph, setGraph] = useState<Graph>({ nodes: [], edges: [] });
@@ -7,6 +7,53 @@ export const useGraph = () => {
         startNode: null,
         endNode: null
     });
+
+    const [dragState, setDragState] = useState<DragState>({ sourceId: null, tempTarget: null });
+
+    const startDrag = (nodeId: string) => {
+        setDragState({ sourceId: nodeId, tempTarget: null });
+    };
+
+    const updateTempTarget = (x: number, y: number) => {
+        if (!dragState.sourceId) return;
+        setDragState(prev => ({ ...prev, tempTarget: { x, y } }));
+    };
+
+    const completeDrag = (targetId: string | null) => {
+        if (!dragState.sourceId || !targetId) {
+            setDragState({ sourceId: null, tempTarget: null });
+            return;
+        }
+
+        // Prevent self-linking
+        if (dragState.sourceId === targetId) {
+            setDragState({ sourceId: null, tempTarget: null });
+            return;
+        }
+
+        // Check if edge already exists
+        const edgeExists = graph.edges.some(
+            edge =>
+                (edge.source === dragState.sourceId && edge.target === targetId) ||
+                (edge.source === targetId && edge.target === dragState.sourceId)
+        );
+
+        if (!edgeExists) {
+            const newEdge: Edge = {
+                id: `edge-${Date.now()}`,
+                source: dragState.sourceId,
+                target: targetId,
+                weight: 1 // Default weight
+            };
+
+            setGraph(prev => ({
+                ...prev,
+                edges: [...prev.edges, newEdge]
+            }));
+        }
+
+        setDragState({ sourceId: null, tempTarget: null });
+    };
 
     const clearGraph = () => {
         setGraph(prev => ({
@@ -24,7 +71,6 @@ export const useGraph = () => {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const isValidNodeNumber = useCallback((num: number) => {
-        console.log("graph in isValidNodeNumber", graph.nodes);
         return graph.nodes.some(node => node.number === num);
     }, [graph]);
 
@@ -87,6 +133,6 @@ export const useGraph = () => {
     };
 
     return {
-        graph, config, isDeleting, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
+        graph, config, isDeleting, dragState, startDrag, updateTempTarget, completeDrag, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
     };
 };

@@ -2,13 +2,18 @@ import React, { useState } from 'react';
 import { useGraph } from '../hooks/useGraph';
 import NodeComponent from './Node';
 import './Graph.css';
-import { Graph, GraphConfig } from '../types/graphTypes';
+import { DragState, Graph, GraphConfig } from '../types/graphTypes';
+import EdgeComponent from './Edge';
 
 interface GraphProps {
   graph: Graph;
   config: GraphConfig;
   isDeleting: boolean;
   isVisualizing: boolean;
+  dragState: DragState,
+  startDrag: (nodeId: string) => void;
+  updateTempTarget: (x: number, y: number) => void;
+  completeDrag: (targetId: string | null) => void;
   addNode: (x: number, y: number) => void;
   deleteNode: (nodeId: string) => void;
   isPositionOccupied: (x: number, y: number) => boolean;
@@ -20,6 +25,10 @@ const GraphComponent: React.FC<GraphProps> = ({
   config,
   isDeleting,
   isVisualizing,
+  dragState,
+  startDrag,
+  updateTempTarget,
+  completeDrag,
   addNode,
   deleteNode,
   setIsDeleting,
@@ -50,25 +59,35 @@ const GraphComponent: React.FC<GraphProps> = ({
 
   const handleMouseUp = () => {
     setIsDeleting(false);
+    completeDrag(null);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDeleting) return;
+    if (isVisualizing) return;
+    if (isDeleting) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+      // Find node under cursor
+      const nodeToDelete = graph.nodes.find(node => {
+        const distance = Math.sqrt(
+          Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)
+        );
+        return distance < 15; // Node radius
+      });
 
-    // Find node under cursor
-    const nodeToDelete = graph.nodes.find(node => {
-      const distance = Math.sqrt(
-        Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)
+      if (nodeToDelete) {
+        deleteNode(nodeToDelete.id);
+      }
+    }
+
+    if (dragState.sourceId) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      updateTempTarget(
+        e.clientX - rect.left,
+        e.clientY - rect.top
       );
-      return distance < 15; // Node radius
-    });
-
-    if (nodeToDelete) {
-      deleteNode(nodeToDelete.id);
     }
   };
 
@@ -81,10 +100,35 @@ const GraphComponent: React.FC<GraphProps> = ({
       onMouseMove={handleMouseMove}
       onContextMenu={(e) => e.preventDefault()}
     >
+      {/* Render permanent edges */}
+      {graph.edges.map(edge => (
+        <EdgeComponent key={edge.id} edge={edge} nodes={graph.nodes} />
+      ))}
+
+      {/* Render temporary drag line */}
+      {dragState.sourceId && dragState.tempTarget && (
+        <EdgeComponent
+          edge={{
+            id: 'temp',
+            source: dragState.sourceId,
+            target: 'temp',
+            weight: 0
+          }}
+          nodes={[
+            ...graph.nodes,
+            { id: 'temp', x: dragState.tempTarget.x, y: dragState.tempTarget.y, number: -1 }
+          ]}
+          isTemp
+        />
+      )}
+
+      {/* Render nodes */}
       {graph.nodes.map(node => (
         <NodeComponent
           key={node.id}
           node={node}
+          onMouseDown={() => {if (!isVisualizing) startDrag(node.id)}}
+          onMouseUp={() => {if (!isVisualizing) completeDrag(node.id)}}
           isDeleting={isDeleting}
           isStart={node.number === config.startNode}
           isEnd={node.number === config.endNode}

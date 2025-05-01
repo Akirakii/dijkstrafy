@@ -4,10 +4,11 @@ import ControlsComponent from './components/Controls';
 import './styles/App.css';
 import { AlgorithmType } from './types/graphTypes';
 import { useGraph } from './hooks/useGraph';
+import SvgDefs from './components/SvgDefs';
 
 const App: React.FC = () => {
   const [isVisualizing, setIsVisualizing] = useState(false);
-  const { graph, config, isDeleting, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
+  const { graph, config, isDeleting, dragState, startDrag, updateTempTarget, completeDrag, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
 
   const handleRunAlgorithm = (algorithm: AlgorithmType) => {
     setIsVisualizing(true);
@@ -26,6 +27,7 @@ const App: React.FC = () => {
   };
   return (
     <div className="app">
+      <SvgDefs />
       <header className="app-header">
         <h1>Pathfinding Visualizer</h1>
         <ControlsComponent
@@ -46,6 +48,10 @@ const App: React.FC = () => {
           config={config}
           isDeleting={isDeleting}
           isVisualizing={isVisualizing}
+          dragState={dragState}
+          startDrag={startDrag}
+          updateTempTarget={updateTempTarget}
+          completeDrag={completeDrag}
           addNode={addNode}
           deleteNode={deleteNode}
           setIsDeleting={setIsDeleting}
