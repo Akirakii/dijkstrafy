@@ -7,7 +7,7 @@ import { useGraph } from './hooks/useGraph';
 
 const App: React.FC = () => {
   const [isVisualizing, setIsVisualizing] = useState(false);
-  const { graph, config, isDeleting, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
+  const { graph, config, isDeleting, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
 
   const handleRunAlgorithm = (algorithm: AlgorithmType) => {
     setIsVisualizing(true);
@@ -35,7 +35,7 @@ const App: React.FC = () => {
           setStartNode={setStartNode}
           setEndNode={setEndNode}
           onRunAlgorithm={handleRunAlgorithm}
-          onClearGraph={handleClearGraph}
+          onClearGraph={clearGraph}
           onPause={handlePause}
         />
       </header>
@@ -43,6 +43,7 @@ const App: React.FC = () => {
       <main className="app-content">
         <Graph
           graph={graph}
+          config={config}
           isDeleting={isDeleting}
           isVisualizing={isVisualizing}
           addNode={addNode}

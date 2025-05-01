@@ -8,6 +8,13 @@ export const useGraph = () => {
         endNode: null
     });
 
+    const clearGraph = () => {
+        setGraph(prev => ({
+            ...prev,
+            nodes: []
+        }));
+    }
+
     const getNextNodeNumber = () => {
         if (graph.nodes.length === 0) return 0;
         const maxNumber = Math.max(...graph.nodes.map(node => node.number));
@@ -19,19 +26,19 @@ export const useGraph = () => {
     const isValidNodeNumber = useCallback((num: number) => {
         console.log("graph in isValidNodeNumber", graph.nodes);
         return graph.nodes.some(node => node.number === num);
-      }, [graph]);
-      
-      const setStartNode = useCallback((num: number | null) => {
+    }, [graph]);
+
+    const setStartNode = useCallback((num: number | null) => {
         if (num === null || isValidNodeNumber(num)) {
-          setConfig(prev => ({ ...prev, startNode: num }));
+            setConfig(prev => ({ ...prev, startNode: num }));
         }
-      }, [isValidNodeNumber]);
-      
-      const setEndNode = useCallback((num: number | null) => {
+    }, [isValidNodeNumber]);
+
+    const setEndNode = useCallback((num: number | null) => {
         if (num === null || isValidNodeNumber(num)) {
-          setConfig(prev => ({ ...prev, endNode: num }));
+            setConfig(prev => ({ ...prev, endNode: num }));
         }
-      }, [isValidNodeNumber]);
+    }, [isValidNodeNumber]);
 
 
     const isPositionOccupied = (x: number, y: number): boolean => {
@@ -80,6 +87,6 @@ export const useGraph = () => {
     };
 
     return {
-        graph, config, setStartNode, setEndNode, addNode, deleteNode, isDeleting, setIsDeleting, isPositionOccupied,
+        graph, config, isDeleting, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
     };
 };

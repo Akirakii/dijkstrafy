@@ -47,3 +47,47 @@
         transform: translate(-50%, -50%) scale(1.1);
     }
 }
+
+.graph-node.start-node {
+    background-color: #2ecc71;
+    /* Green */
+    border-color: #27ae60;
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3);
+    animation: pulse-start 1.5s infinite;
+}
+
+.graph-node.end-node {
+    background-color: #e74c3c;
+    /* Red */
+    border-color: #c0392b;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+    animation: pulse-end 1.5s infinite;
+}
+
+@keyframes pulse-start {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes pulse-end {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}

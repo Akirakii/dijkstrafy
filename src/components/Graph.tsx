@@ -6,6 +6,7 @@ import { Graph, GraphConfig } from '../types/graphTypes';
 
 interface GraphProps {
   graph: Graph;
+  config: GraphConfig;
   isDeleting: boolean;
   isVisualizing: boolean;
   addNode: (x: number, y: number) => void;
@@ -16,6 +17,7 @@ interface GraphProps {
 
 const GraphComponent: React.FC<GraphProps> = ({
   graph,
+  config,
   isDeleting,
   isVisualizing,
   addNode,
@@ -84,6 +86,8 @@ const GraphComponent: React.FC<GraphProps> = ({
           key={node.id}
           node={node}
           isDeleting={isDeleting}
+          isStart={node.number === config.startNode}
+          isEnd={node.number === config.endNode}
         />
       ))}
     </div>
