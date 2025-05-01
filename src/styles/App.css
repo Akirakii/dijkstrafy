@@ -1,0 +1,26 @@
+/* src/styles/App.css */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  padding: 1rem;
+  background: #2c3e50;
+  color: white;
+  text-align: center;
+}
+
+.app-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.app-footer {
+  padding: 0.5rem;
+  background: #ecf0f1;
+  text-align: center;
+  font-size: 0.8rem;
+}
