@@ -10,7 +10,7 @@ interface ControlsProps {
   setEndNode: (num: number | null) => void;
   onRunAlgorithm: (algorithm: AlgorithmType) => void;
   onClearGraph: () => void;
-  onPause: () => void;
+  onStop: () => void;
   isVisualizing: boolean;
 }
 
@@ -21,7 +21,7 @@ const Controls: React.FC<ControlsProps> = ({
   setStartNode,
   setEndNode,
   onClearGraph,
-  onPause,
+  onStop,
   isVisualizing
 }) => {
   const isStartValid = config.startNode === null ||
@@ -84,10 +84,10 @@ const Controls: React.FC<ControlsProps> = ({
         {isVisualizing && (
           <button
             className="control-button pause-button"
-            onClick={onPause}
+            onClick={onStop}
           >
             {/* <FaPause /> Pause */}
-            Pause
+            Stop
           </button>
         )}
       </div>

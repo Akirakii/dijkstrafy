@@ -7,29 +7,17 @@ import { useGraph } from './hooks/useGraph';
 import SvgDefs from './components/SvgDefs';
 
 const App: React.FC = () => {
-  const [isVisualizing, setIsVisualizing] = useState(false);
-  const { graph, config, isDeleting, dragState, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
+  const { graph, config, isDeleting, dragState, visualizationStateSet, isVisualizing, stopVisualization, visualizeDijkstra, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
 
   const handleRunAlgorithm = (algorithm: AlgorithmType) => {
-    setIsVisualizing(true);
-    // Add your algorithm execution logic here
+    visualizeDijkstra();
     console.log(`Running ${algorithm}`);
   };
 
-  const handleClearGraph = () => {
-    // Add graph clearing logic
-    console.log('Clearing graph');
-  };
-
-  const handlePause = () => {
-    setIsVisualizing(false);
-    // Add pause logic
-  };
   return (
     <div className="app">
       <SvgDefs />
       <header className="app-header">
-        <h1>Pathfinding Visualizer</h1>
         <ControlsComponent
           graph={graph}
           config={config}
@@ -38,7 +26,7 @@ const App: React.FC = () => {
           setEndNode={setEndNode}
           onRunAlgorithm={handleRunAlgorithm}
           onClearGraph={clearGraph}
-          onPause={handlePause}
+          onStop={stopVisualization}
         />
       </header>
 
@@ -48,6 +36,7 @@ const App: React.FC = () => {
           config={config}
           isDeleting={isDeleting}
           isVisualizing={isVisualizing}
+          visualizationStateSet={visualizationStateSet}
           dragState={dragState}
           updateEdgeWeight={updateEdgeWeight}
           startDrag={startDrag}

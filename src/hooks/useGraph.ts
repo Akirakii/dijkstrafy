@@ -1,14 +1,131 @@
-import { useCallback, useState } from 'react';
-import { DragState, Edge, Graph, GraphConfig, Node } from '../types/graphTypes';
+import { useCallback, useRef, useState } from 'react';
+import { DragState, Edge, Graph, GraphConfig, Node, VisualizationStateSet } from '../types/graphTypes';
 
 export const useGraph = () => {
+    const [isVisualizing, setIsVisualizing] = useState(false);
     const [graph, setGraph] = useState<Graph>({ nodes: [], edges: [] });
+    const [dragState, setDragState] = useState<DragState>({ sourceId: null, tempTarget: null });
     const [config, setConfig] = useState<GraphConfig>({
         startNode: null,
         endNode: null
     });
+    const [visualizationStateSet, setVisualizationState] = useState<VisualizationStateSet>({
+        visited: new Set(),
+        visitedEdges: new Set(),
+        path: new Set(),
+        pathEdges: new Set()
+    });
+    const visualizationActive = useRef(false);
 
-    const [dragState, setDragState] = useState<DragState>({ sourceId: null, tempTarget: null });
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const stopVisualization = () => {
+        visualizationActive.current = false;
+        setIsVisualizing(false);
+        setVisualizationState({
+            visited: new Set(),
+            visitedEdges: new Set(),
+            path: new Set(),
+            pathEdges: new Set()
+        });
+    };
+
+    const visualizeDijkstra = async () => {
+        // 1. Initialize tracking
+        visualizationActive.current = true;
+        setIsVisualizing(true);
+        console.log('Visualization started (ref):', visualizationActive.current);
+
+        // 2. Validate inputs
+        if (config.startNode == null || config.endNode == null) {
+            stopVisualization();
+            return;
+        }
+
+        // 3. Reset visualization
+        setVisualizationState({
+            visited: new Set(),
+            visitedEdges: new Set(),
+            path: new Set(),
+            pathEdges: new Set()
+        });
+
+        try {
+            // 4. Algorithm setup
+            const { nodes, edges } = graph;
+            const distances = new Map<string, number>();
+            const previous = new Map<string, string>();
+            const unvisited = new Set(nodes.map(n => n.id));
+
+            // Initialize distances
+            nodes.forEach(node => {
+                distances.set(node.id, node.number === config.startNode ? 0 : Infinity);
+            });
+
+            // 5. Main algorithm loop
+            while (unvisited.size > 0 && visualizationActive.current) {
+                const currentId = Array.from(unvisited).reduce((a, b) =>
+                    distances.get(a)! < distances.get(b)! ? a : b
+                );
+
+                // Update visited nodes
+                setVisualizationState(prev => ({
+                    ...prev,
+                    visited: new Set(prev.visited).add(currentId)
+                }));
+
+                await sleep(300);
+                if (!visualizationActive.current) break;
+
+                // Check if reached end node
+                if (currentId === nodes.find(n => n.number === config.endNode)?.id) break;
+
+                // Process neighbors
+                edges
+                    .filter(edge => edge.source === currentId)
+                    .forEach(edge => {
+                        const neighborId = edge.target;
+                        const alt = distances.get(currentId)! + edge.weight;
+
+                        if (alt < distances.get(neighborId)!) {
+                            distances.set(neighborId, alt);
+                            previous.set(neighborId, currentId);
+
+                            setVisualizationState(prev => ({
+                                ...prev,
+                                visitedEdges: new Set(prev.visitedEdges).add(edge.id)
+                            }));
+                        }
+                    });
+
+                unvisited.delete(currentId);
+            }
+
+            // 6. Path reconstruction (if not cancelled)
+            if (visualizationActive.current) {
+                let currentId = nodes.find(n => n.number === config.endNode)?.id;
+                while (currentId && previous.has(currentId)) {
+                    const prevId = previous.get(currentId)!;
+                    const edge = edges.find(e => e.source === prevId && e.target === currentId);
+
+                    if (edge) {
+                        setVisualizationState(prev => ({
+                            ...prev,
+                            path: new Set(prev.path).add(currentId!),
+                            pathEdges: new Set(prev.pathEdges).add(edge.id)
+                        }));
+                        await sleep(100);
+                        if (!visualizationActive.current) break;
+                    }
+                    currentId = prevId;
+                }
+            }
+        } catch (error) {
+            console.error("Visualization error:", error);
+            stopVisualization();
+        } finally {
+        }
+    };
 
     const updateEdgeWeight = (edgeId: string, newWeight: number) => {
         setGraph(prev => ({
@@ -142,6 +259,6 @@ export const useGraph = () => {
     };
 
     return {
-        graph, config, isDeleting, dragState, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
+        graph, config, isDeleting, dragState, visualizationStateSet, isVisualizing, stopVisualization, visualizeDijkstra, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
     };
 };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useGraph } from '../hooks/useGraph';
 import NodeComponent from './Node';
 import './Graph.css';
-import { DragState, Graph, GraphConfig } from '../types/graphTypes';
+import { DragState, Graph, GraphConfig, VisualizationState, VisualizationStateSet } from '../types/graphTypes';
 import EdgeComponent from './Edge';
 
 interface GraphProps {
@@ -10,7 +10,8 @@ interface GraphProps {
   config: GraphConfig;
   isDeleting: boolean;
   isVisualizing: boolean;
-  dragState: DragState,
+  dragState: DragState;
+  visualizationStateSet: VisualizationStateSet;
   updateEdgeWeight: (edgeId: string, newWeight: number) => void;
   startDrag: (nodeId: string) => void;
   updateTempTarget: (x: number, y: number) => void;
@@ -27,6 +28,7 @@ const GraphComponent: React.FC<GraphProps> = ({
   isDeleting,
   isVisualizing,
   dragState,
+  visualizationStateSet,
   updateEdgeWeight,
   startDrag,
   updateTempTarget,
@@ -95,6 +97,20 @@ const GraphComponent: React.FC<GraphProps> = ({
     }
   };
 
+  const getNodeVisualizationState = (nodeId: string): VisualizationState => {
+    // Priority: Path > Visited > Default
+    if (visualizationStateSet.path.has(nodeId)) return 'path';
+    if (visualizationStateSet.visited.has(nodeId)) return 'visited';
+    return 'unvisited';
+  };
+
+  const getEdgeVisualizationState = (edgeId: string): VisualizationState => {
+    // Priority: Path > Visited > Default
+    if (visualizationStateSet.pathEdges.has(edgeId)) return 'path';
+    if (visualizationStateSet.visitedEdges.has(edgeId)) return 'visited';
+    return 'unvisited';
+  };
+
   return (
     <div
       className="graph-container"
@@ -111,6 +127,7 @@ const GraphComponent: React.FC<GraphProps> = ({
           edge={edge}
           nodes={graph.nodes}
           isVisualizing={isVisualizing}
+          visualizationState={getEdgeVisualizationState(edge.id)}
           onWeightChange={updateEdgeWeight} />
       ))}
 
@@ -127,6 +144,7 @@ const GraphComponent: React.FC<GraphProps> = ({
             ...graph.nodes,
             { id: 'temp', x: dragState.tempTarget.x, y: dragState.tempTarget.y, number: -1 }
           ]}
+          visualizationState={'end'}
           isTemp
         />
       )}
@@ -141,6 +159,8 @@ const GraphComponent: React.FC<GraphProps> = ({
           isDeleting={isDeleting}
           isStart={node.number === config.startNode}
           isEnd={node.number === config.endNode}
+          visualizationState={getNodeVisualizationState(node.id)} // Your state logic
+          isVisualizing={isVisualizing}
         />
       ))}
     </div>

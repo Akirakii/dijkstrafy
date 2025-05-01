@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Edge } from '../types/graphTypes';
+import { Edge, VISUALIZATION_THEME, VisualizationState } from '../types/graphTypes';
 import { Node } from '../types/graphTypes';
 
 interface EdgeProps {
   edge: Edge;
   nodes: Node[];
+  visualizationState: VisualizationState;
   isVisualizing?: boolean;
   isTemp?: boolean;
   onWeightChange?: (edgeId: string, newWeight: number) => void;
@@ -13,6 +14,7 @@ interface EdgeProps {
 const EdgeComponent: React.FC<EdgeProps> = ({
   edge,
   nodes,
+  visualizationState,
   isVisualizing = false,
   isTemp = false,
   onWeightChange = () => { }
@@ -34,6 +36,8 @@ const EdgeComponent: React.FC<EdgeProps> = ({
 
   const midX = (sourceNode.x + targetNode.x) / 2;
   const midY = (sourceNode.y + targetNode.y) / 2;
+
+  const getStateColor = () => { return VISUALIZATION_THEME[visualizationState].edge; }
 
   const handleWeightSubmit = () => {
     const newWeight = Math.max(1, parseInt(tempWeight) || 1);
@@ -60,7 +64,8 @@ const EdgeComponent: React.FC<EdgeProps> = ({
         y1={sourceNode.y}
         x2={targetNode.x}
         y2={targetNode.y}
-        stroke={isTemp ? '#3498db' : '#7f8c8d'}
+        stroke={isTemp ? '#3498db' : isVisualizing ? getStateColor() : '#7f8c8d'}
+        // stroke={getStateColor()}
         strokeWidth={2}
         strokeDasharray={isTemp ? '5,5' : undefined}
         markerEnd="url(#arrowhead)"
