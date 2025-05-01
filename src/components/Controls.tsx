@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaPlay, FaTrash, FaPause } from 'react-icons/fa';
 import { AlgorithmType, Graph, GraphConfig } from '../types/graphTypes';
 import './Controls.css';
@@ -24,34 +24,38 @@ const Controls: React.FC<ControlsProps> = ({
   onStop,
   isVisualizing
 }) => {
-  const isStartValid = config.startNode === null ||
-    graph.nodes.some(n => n.number === config.startNode);
+  const [validationTriggered, setValidationTriggered] = useState(false);
 
-  const isEndValid = config.endNode === null ||
+  const isStartValid = config.startNode != null &&
+    graph.nodes.some(n => n.number === config.startNode);
+  const isEndValid = config.endNode != null &&
     graph.nodes.some(n => n.number === config.endNode);
+
   return (
     <div className="controls-container">
       <div className="node-selection">
-        <div className={`input-group ${!isStartValid ? 'invalid' : ''}`}>
+        <div className={`input-group ${validationTriggered && !isStartValid ? 'invalid' : ''}`}>
           <label>Start Node:</label>
           <input
             type="number"
             min="0"
             value={config.startNode ?? ''}
             onChange={(e) => {
+              setValidationTriggered(false);
               const value = e.target.value;
               setStartNode(value === '' ? null : parseInt(value));
             }}
           />
         </div>
 
-        <div className={`input-group ${!isEndValid ? 'invalid' : ''}`}>
+        <div className={`input-group ${validationTriggered && !isEndValid ? 'invalid' : ''}`}>
           <label>End Node:</label>
           <input
             type="number"
             min="0"
             value={config.endNode ?? ''}
             onChange={(e) => {
+              setValidationTriggered(false);
               const value = e.target.value;
               setEndNode(value === '' ? null : parseInt(value));
             }}
@@ -72,6 +76,10 @@ const Controls: React.FC<ControlsProps> = ({
         <button
           className="control-button run-button"
           onClick={() => {
+            setValidationTriggered(true);
+            if (!isStartValid || !isEndValid) {
+              return;
+            }
             const select = document.getElementById('algorithm') as HTMLSelectElement;
             onRunAlgorithm(select.value as AlgorithmType);
           }}
@@ -80,6 +88,7 @@ const Controls: React.FC<ControlsProps> = ({
           {/* <FaPlay /> Run */}
           Run
         </button>
+
 
         {isVisualizing && (
           <button
