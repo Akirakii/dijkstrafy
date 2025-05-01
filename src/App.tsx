@@ -7,7 +7,7 @@ import { useGraph } from './hooks/useGraph';
 import SvgDefs from './components/SvgDefs';
 
 const App: React.FC = () => {
-  const { graph, config, isDeleting, dragState, visualizationStateSet, isVisualizing, stopVisualization, visualizeDijkstra, visualizeBellmanFord, visualizeSPFA,  updateEdgeWeight, startDrag, updateTempTarget, completeDrag, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
+  const { graph, config, isDeleting, dragState, visualizationStateSet, isVisualizing, stopVisualization, visualizeDijkstra, visualizeBellmanFord, visualizeSPFA, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
 
   const handleRunAlgorithm = (algorithm: AlgorithmType) => {
     if (algorithm == 'dijkstra') {
@@ -37,6 +37,7 @@ const App: React.FC = () => {
           onStop={stopVisualization}
         />
       </header>
+      <a className="source" href="https://github.com/Akirakii/dijkstrafy">See the source code at github</a>
 
       <main className="app-content">
         <Graph

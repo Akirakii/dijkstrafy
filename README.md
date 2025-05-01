@@ -1,46 +1,47 @@
-# Getting Started with Create React App
+# Dijkstrafy 🔍
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Dijkstrafy** is a visual interactive graph algorithm simulator built with **React** and **TypeScript**. It allows users to create nodes and edges, then run various shortest path algorithms such as:
 
-## Available Scripts
+- 🟢 **Dijkstra's Algorithm**
+- 🟠 **Bellman-Ford Algorithm**
+- 🔵 **SPFA (Shortest Path Faster Algorithm)**
 
-In the project directory, you can run:
+The application provides real-time visual feedback as each algorithm progresses through the graph.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 🌐 Live Demo
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+🎉 Try it out here:  
+🔗 [https://akirakii.github.io/dijkstrafy/](https://akirakii.github.io/dijkstrafy/)
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## ✨ Features
 
-### `npm run build`
+- **Visualize shortest path algorithms step-by-step**
+- **Interactive node and edge creation**
+- **Support for directed, weighted graphs**
+- **Real-time highlighting of visited nodes, edges, and final path**
+- **Pause and stop visualizations anytime**
+- **Modern UI built with React + TypeScript**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📦 Tech Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- ⚛️ React
+- ⌨️ TypeScript
+- 🎨 CSS Modules / Custom styling
+- 📦 `gh-pages` for deployment
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 🚀 Local Setup
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Clone the repo:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+git clone https://github.com/akirakii/dijkstrafy.git
+cd dijkstrafy
+npm install

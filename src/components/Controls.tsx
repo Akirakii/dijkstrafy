@@ -119,7 +119,7 @@ const Controls: React.FC<ControlsProps> = ({
       ) : (
         <div className="empty-graph-message">
           <p className="title">This is <strong>Dijkstrafy</strong></p>
-          {graph.nodes.length > 1 ? (<p>Click and drag one node to another to create a connection!</p>) : <p>Click on the board to create some nodes and try to connect them!</p>}
+          {graph.nodes.length > 1 ? (<p>Click and drag one node to another to create a connection!</p>) : <p>Calculates the shortest path on a directed weighted graph! 😮🪄 <br /> Click on the board to create some nodes and try to connect them!</p>}
         </div>
       )}
     </>

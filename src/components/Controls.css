@@ -120,7 +120,8 @@
 }
 
 .empty-graph-message {
-  padding: 1rem;
+  line-height: 2rem;
+  padding: 0.6rem 3rem;
   text-align: center;
   font-size: 1.1rem;
   color: #1c1c1e;
@@ -129,5 +130,6 @@
 }
 .empty-graph-message .title{
   font-size: 2rem;
+  line-height: 1rem;
   padding: 0;
 }
