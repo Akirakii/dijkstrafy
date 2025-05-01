@@ -14,7 +14,10 @@ export interface Edge {
 export interface Graph {
     nodes: Node[];
     edges: Edge[];
-    startNode?: number; // Number of start node
-    endNode?: number;   // Number of end node
 }
+
+export type GraphConfig = {
+    startNode: number | null;
+    endNode: number | null;
+  };
 export type AlgorithmType = 'dijkstra' | 'astar' | 'bfs';

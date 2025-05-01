@@ -2,12 +2,31 @@ import React, { useState } from 'react';
 import { useGraph } from '../hooks/useGraph';
 import NodeComponent from './Node';
 import './Graph.css';
+import { Graph, GraphConfig } from '../types/graphTypes';
 
-const GraphComponent = () => {
-  const { graph, addNode, deleteNode, isDeleting, setIsDeleting, isPositionOccupied } = useGraph();
+interface GraphProps {
+  graph: Graph;
+  isDeleting: boolean;
+  isVisualizing: boolean;
+  addNode: (x: number, y: number) => void;
+  deleteNode: (nodeId: string) => void;
+  isPositionOccupied: (x: number, y: number) => boolean;
+  setIsDeleting: (val: boolean) => void;
+}
+
+const GraphComponent: React.FC<GraphProps> = ({
+  graph,
+  isDeleting,
+  isVisualizing,
+  addNode,
+  deleteNode,
+  setIsDeleting,
+  isPositionOccupied,
+}) => {
   const [invalidPosition, setInvalidPosition] = useState<{ x: number, y: number } | null>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (isVisualizing) return;
     if (e.button === 2) { // Right click
       setIsDeleting(true);
       e.preventDefault();

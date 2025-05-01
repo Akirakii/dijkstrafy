@@ -1,9 +1,13 @@
 import React from 'react';
 import { FaPlay, FaTrash, FaPause } from 'react-icons/fa';
-import { AlgorithmType } from '../types/graphTypes';
+import { AlgorithmType, Graph, GraphConfig } from '../types/graphTypes';
 import './Controls.css';
 
 interface ControlsProps {
+  graph: Graph;
+  config: GraphConfig;
+  setStartNode: (num: number | null) => void;
+  setEndNode: (num: number | null) => void;
   onRunAlgorithm: (algorithm: AlgorithmType) => void;
   onClearGraph: () => void;
   onPause: () => void;
@@ -11,13 +15,49 @@ interface ControlsProps {
 }
 
 const Controls: React.FC<ControlsProps> = ({
+  graph,
+  config,
   onRunAlgorithm,
+  setStartNode,
+  setEndNode,
   onClearGraph,
   onPause,
   isVisualizing
 }) => {
+  const isStartValid = config.startNode === null ||
+    graph.nodes.some(n => n.number === config.startNode);
+
+  const isEndValid = config.endNode === null ||
+    graph.nodes.some(n => n.number === config.endNode);
   return (
     <div className="controls-container">
+      <div className="node-selection">
+        <div className={`input-group ${!isStartValid ? 'invalid' : ''}`}>
+          <label>Start Node:</label>
+          <input
+            type="number"
+            min="0"
+            value={config.startNode ?? ''}
+            onChange={(e) => {
+              const value = e.target.value;
+              setStartNode(value === '' ? null : parseInt(value));
+            }}
+          />
+        </div>
+
+        <div className={`input-group ${!isEndValid ? 'invalid' : ''}`}>
+          <label>End Node:</label>
+          <input
+            type="number"
+            min="0"
+            value={config.endNode ?? ''}
+            onChange={(e) => {
+              const value = e.target.value;
+              setEndNode(value === '' ? null : parseInt(value));
+            }}
+          />
+        </div>
+      </div>
       <div className="algorithm-selector">
         <select
           id="algorithm"

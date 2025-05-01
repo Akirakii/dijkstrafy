@@ -54,3 +54,33 @@
   transform: translateY(-1px);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.node-selection {
+  display: flex;
+  gap: 1rem;
+  margin-right: 2rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.input-group input {
+  padding: 0.3rem;
+  width: 80px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+}
+
+.input-group.invalid input {
+  border-color: #ff4757;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}

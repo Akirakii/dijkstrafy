@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import Graph from './components/Graph';
-import Controls from './components/Controls';
+import ControlsComponent from './components/Controls';
 import './styles/App.css';
 import { AlgorithmType } from './types/graphTypes';
+import { useGraph } from './hooks/useGraph';
 
 const App: React.FC = () => {
   const [isVisualizing, setIsVisualizing] = useState(false);
+  const { graph, config, isDeleting, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
 
   const handleRunAlgorithm = (algorithm: AlgorithmType) => {
     setIsVisualizing(true);
@@ -26,16 +28,28 @@ const App: React.FC = () => {
     <div className="app">
       <header className="app-header">
         <h1>Pathfinding Visualizer</h1>
-        <Controls
+        <ControlsComponent
+          graph={graph}
+          config={config}
+          isVisualizing={isVisualizing}
+          setStartNode={setStartNode}
+          setEndNode={setEndNode}
           onRunAlgorithm={handleRunAlgorithm}
           onClearGraph={handleClearGraph}
           onPause={handlePause}
-          isVisualizing={isVisualizing}
         />
       </header>
 
       <main className="app-content">
-        <Graph />
+        <Graph
+          graph={graph}
+          isDeleting={isDeleting}
+          isVisualizing={isVisualizing}
+          addNode={addNode}
+          deleteNode={deleteNode}
+          setIsDeleting={setIsDeleting}
+          isPositionOccupied={isPositionOccupied}
+        />
       </main>
 
       <footer className="app-footer">

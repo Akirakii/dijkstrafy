@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { Graph, Node } from '../types/graphTypes';
+import { useCallback, useState } from 'react';
+import { Graph, GraphConfig, Node } from '../types/graphTypes';
 
 export const useGraph = () => {
-    const [graph, setGraph] = useState<Graph>({
-        nodes: [],
-        edges: []
+    const [graph, setGraph] = useState<Graph>({ nodes: [], edges: [] });
+    const [config, setConfig] = useState<GraphConfig>({
+        startNode: null,
+        endNode: null
     });
 
     const getNextNodeNumber = () => {
@@ -14,6 +15,24 @@ export const useGraph = () => {
     };
 
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const isValidNodeNumber = useCallback((num: number) => {
+        console.log("graph in isValidNodeNumber", graph.nodes);
+        return graph.nodes.some(node => node.number === num);
+      }, [graph]);
+      
+      const setStartNode = useCallback((num: number | null) => {
+        if (num === null || isValidNodeNumber(num)) {
+          setConfig(prev => ({ ...prev, startNode: num }));
+        }
+      }, [isValidNodeNumber]);
+      
+      const setEndNode = useCallback((num: number | null) => {
+        if (num === null || isValidNodeNumber(num)) {
+          setConfig(prev => ({ ...prev, endNode: num }));
+        }
+      }, [isValidNodeNumber]);
+
 
     const isPositionOccupied = (x: number, y: number): boolean => {
         const NODE_RADIUS = 15; // Should match your CSS node size
@@ -42,20 +61,25 @@ export const useGraph = () => {
     };
 
     const deleteNode = (nodeId: string) => {
-        setGraph(prev => ({
-            nodes: prev.nodes.filter(node => node.id !== nodeId),
-            edges: prev.edges.filter(edge =>
-                edge.source !== nodeId && edge.target !== nodeId
-            ),
-        }));
+        setGraph(prev => {
+            const deletedNode = prev.nodes.find(n => n.id === nodeId);
+            const newNodes = prev.nodes.filter(n => n.id !== nodeId);
+
+            if (deletedNode) {
+                if (deletedNode.number === config.startNode) setStartNode(null);
+                if (deletedNode.number === config.endNode) setEndNode(null);
+            }
+
+            return {
+                nodes: newNodes,
+                edges: prev.edges.filter(e =>
+                    e.source !== nodeId && e.target !== nodeId
+                )
+            };
+        });
     };
 
     return {
-        graph, addNode, deleteNode, isDeleting, setIsDeleting, isPositionOccupied, setStartNode: (num: number) => {
-            setGraph(prev => ({ ...prev, startNode: num }));
-        },
-        setEndNode: (num: number) => {
-            setGraph(prev => ({ ...prev, endNode: num }));
-        },
+        graph, config, setStartNode, setEndNode, addNode, deleteNode, isDeleting, setIsDeleting, isPositionOccupied,
     };
 };
