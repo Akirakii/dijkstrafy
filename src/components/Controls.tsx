@@ -65,8 +65,8 @@ const Controls: React.FC<ControlsProps> = ({
           disabled={isVisualizing}
         >
           <option value="dijkstra">Dijkstra's</option>
-          <option value="astar">A* Search</option>
-          <option value="bfs">Breadth-First Search</option>
+          <option value="bellman ford">Bellman Ford</option>
+          <option value="spfa">SPFA</option>
         </select>
 
         <button

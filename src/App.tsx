@@ -7,10 +7,18 @@ import { useGraph } from './hooks/useGraph';
 import SvgDefs from './components/SvgDefs';
 
 const App: React.FC = () => {
-  const { graph, config, isDeleting, dragState, visualizationStateSet, isVisualizing, stopVisualization, visualizeDijkstra, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
+  const { graph, config, isDeleting, dragState, visualizationStateSet, isVisualizing, stopVisualization, visualizeDijkstra, visualizeBellmanFord, visualizeSPFA,  updateEdgeWeight, startDrag, updateTempTarget, completeDrag, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
 
   const handleRunAlgorithm = (algorithm: AlgorithmType) => {
-    visualizeDijkstra();
+    if (algorithm == 'dijkstra') {
+      visualizeDijkstra();
+    }
+    if (algorithm == 'bellman ford') {
+      visualizeBellmanFord();
+    }
+    if (algorithm == 'spfa') {
+      visualizeSPFA();
+    }
     console.log(`Running ${algorithm}`);
   };
 

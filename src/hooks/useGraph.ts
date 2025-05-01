@@ -127,6 +127,187 @@ export const useGraph = () => {
         }
     };
 
+    const visualizeBellmanFord = async () => {
+        visualizationActive.current = true;
+        setIsVisualizing(true);
+        console.log('Visualization started (ref):', visualizationActive.current);
+
+        if (config.startNode == null || config.endNode == null) {
+            stopVisualization();
+            return;
+        }
+
+        setVisualizationState({
+            visited: new Set(),
+            visitedEdges: new Set(),
+            path: new Set(),
+            pathEdges: new Set()
+        });
+
+        try {
+            const { nodes, edges } = graph;
+            const distances = new Map<string, number>();
+            const previous = new Map<string, string>();
+
+            nodes.forEach(node => {
+                distances.set(node.id, node.number === config.startNode ? 0 : Infinity);
+            });
+
+            const V = nodes.length;
+
+            for (let i = 0; i < V - 1; i++) {
+                if (!visualizationActive.current) break;
+
+                for (const edge of edges) {
+                    const { source, target, weight, id } = edge;
+                    const alt = distances.get(source)! + weight;
+
+                    if (alt < distances.get(target)!) {
+                        distances.set(target, alt);
+                        previous.set(target, source);
+
+                        setVisualizationState(prev => ({
+                            ...prev,
+                            visitedEdges: new Set(prev.visitedEdges).add(id)
+                        }));
+
+                        await sleep(300);
+                        if (!visualizationActive.current) break;
+                    }
+                }
+            }
+
+            // Optional: Detect negative weight cycle
+            for (const edge of edges) {
+                const { source, target, weight } = edge;
+                if (distances.get(source)! + weight < distances.get(target)!) {
+                    console.warn("Negative weight cycle detected");
+                    throw new Error("Negative weight cycle detected");
+                }
+            }
+
+            // Reconstruct path
+            if (visualizationActive.current) {
+                let currentId = nodes.find(n => n.number === config.endNode)?.id;
+                while (currentId && previous.has(currentId)) {
+                    const prevId = previous.get(currentId)!;
+                    const edge = edges.find(e => e.source === prevId && e.target === currentId);
+
+                    if (edge) {
+                        setVisualizationState(prev => ({
+                            ...prev,
+                            path: new Set(prev.path).add(currentId!),
+                            pathEdges: new Set(prev.pathEdges).add(edge.id)
+                        }));
+                        await sleep(100);
+                        if (!visualizationActive.current) break;
+                    }
+                    currentId = prevId;
+                }
+            }
+
+        } catch (error) {
+            console.error("Visualization error:", error);
+            stopVisualization();
+        }
+    }
+
+    const visualizeSPFA = async () => {
+        visualizationActive.current = true;
+        setIsVisualizing(true);
+        console.log('Visualization started (ref):', visualizationActive.current);
+
+        if (config.startNode == null || config.endNode == null) {
+            stopVisualization();
+            return;
+        }
+
+        setVisualizationState({
+            visited: new Set(),
+            visitedEdges: new Set(),
+            path: new Set(),
+            pathEdges: new Set()
+        });
+
+        try {
+            const { nodes, edges } = graph;
+            const distances = new Map<string, number>();
+            const previous = new Map<string, string>();
+            const inQueue = new Set<string>();
+            const queue: string[] = [];
+
+            // Initialize distances
+            nodes.forEach(node => {
+                const isStart = node.number === config.startNode;
+                distances.set(node.id, isStart ? 0 : Infinity);
+                if (isStart) {
+                    queue.push(node.id);
+                    inQueue.add(node.id);
+                }
+            });
+
+            while (queue.length > 0 && visualizationActive.current) {
+                const currentId = queue.shift()!;
+                inQueue.delete(currentId);
+
+                setVisualizationState(prev => ({
+                    ...prev,
+                    visited: new Set(prev.visited).add(currentId)
+                }));
+
+                await sleep(200);
+                if (!visualizationActive.current) break;
+
+                for (const edge of edges.filter(e => e.source === currentId)) {
+                    const { target, weight, id } = edge;
+                    const alt = distances.get(currentId)! + weight;
+
+                    if (alt < distances.get(target)!) {
+                        distances.set(target, alt);
+                        previous.set(target, currentId);
+
+                        setVisualizationState(prev => ({
+                            ...prev,
+                            visitedEdges: new Set(prev.visitedEdges).add(id)
+                        }));
+
+                        if (!inQueue.has(target)) {
+                            queue.push(target);
+                            inQueue.add(target);
+                        }
+
+                        await sleep(100);
+                        if (!visualizationActive.current) break;
+                    }
+                }
+            }
+
+            // Reconstruct path
+            if (visualizationActive.current) {
+                let currentId = nodes.find(n => n.number === config.endNode)?.id;
+                while (currentId && previous.has(currentId)) {
+                    const prevId = previous.get(currentId)!;
+                    const edge = edges.find(e => e.source === prevId && e.target === currentId);
+
+                    if (edge) {
+                        setVisualizationState(prev => ({
+                            ...prev,
+                            path: new Set(prev.path).add(currentId!),
+                            pathEdges: new Set(prev.pathEdges).add(edge.id)
+                        }));
+                        await sleep(100);
+                        if (!visualizationActive.current) break;
+                    }
+                    currentId = prevId;
+                }
+            }
+
+        } catch (error) {
+            console.error("Visualization error:", error);
+            stopVisualization();
+        }
+    };
+
     const updateEdgeWeight = (edgeId: string, newWeight: number) => {
         setGraph(prev => ({
             ...prev,
@@ -259,6 +440,6 @@ export const useGraph = () => {
     };
 
     return {
-        graph, config, isDeleting, dragState, visualizationStateSet, isVisualizing, stopVisualization, visualizeDijkstra, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
+        graph, config, isDeleting, dragState, visualizationStateSet, isVisualizing, stopVisualization, visualizeDijkstra, visualizeBellmanFord, visualizeSPFA, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
     };
 };

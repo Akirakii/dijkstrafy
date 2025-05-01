@@ -27,7 +27,7 @@ export type GraphConfig = {
   endNode: number | null;
 };
 
-export type AlgorithmType = 'dijkstra' | 'astar' | 'bfs';
+export type AlgorithmType = 'dijkstra' | 'bellman ford' | 'spfa' ;
 
 export type VisualizationState =
   | 'unvisited'
