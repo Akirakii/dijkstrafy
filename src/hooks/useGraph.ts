@@ -10,6 +10,15 @@ export const useGraph = () => {
 
     const [dragState, setDragState] = useState<DragState>({ sourceId: null, tempTarget: null });
 
+    const updateEdgeWeight = (edgeId: string, newWeight: number) => {
+        setGraph(prev => ({
+            ...prev,
+            edges: prev.edges.map(edge =>
+                edge.id === edgeId ? { ...edge, weight: newWeight } : edge
+            )
+        }));
+    };
+
     const startDrag = (nodeId: string) => {
         setDragState({ sourceId: nodeId, tempTarget: null });
     };
@@ -133,6 +142,6 @@ export const useGraph = () => {
     };
 
     return {
-        graph, config, isDeleting, dragState, startDrag, updateTempTarget, completeDrag, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
+        graph, config, isDeleting, dragState, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
     };
 };

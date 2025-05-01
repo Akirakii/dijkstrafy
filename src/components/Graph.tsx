@@ -11,6 +11,7 @@ interface GraphProps {
   isDeleting: boolean;
   isVisualizing: boolean;
   dragState: DragState,
+  updateEdgeWeight: (edgeId: string, newWeight: number) => void;
   startDrag: (nodeId: string) => void;
   updateTempTarget: (x: number, y: number) => void;
   completeDrag: (targetId: string | null) => void;
@@ -26,6 +27,7 @@ const GraphComponent: React.FC<GraphProps> = ({
   isDeleting,
   isVisualizing,
   dragState,
+  updateEdgeWeight,
   startDrag,
   updateTempTarget,
   completeDrag,
@@ -43,6 +45,8 @@ const GraphComponent: React.FC<GraphProps> = ({
       e.preventDefault();
     }
     if (e.button == 0) {
+      const target = e.target as HTMLElement;
+      if (!target?.classList?.contains('graph-container')) return;
       const rect = e.currentTarget.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -102,7 +106,12 @@ const GraphComponent: React.FC<GraphProps> = ({
     >
       {/* Render permanent edges */}
       {graph.edges.map(edge => (
-        <EdgeComponent key={edge.id} edge={edge} nodes={graph.nodes} />
+        <EdgeComponent
+          key={edge.id}
+          edge={edge}
+          nodes={graph.nodes}
+          isVisualizing={isVisualizing}
+          onWeightChange={updateEdgeWeight} />
       ))}
 
       {/* Render temporary drag line */}
@@ -127,8 +136,8 @@ const GraphComponent: React.FC<GraphProps> = ({
         <NodeComponent
           key={node.id}
           node={node}
-          onMouseDown={() => {if (!isVisualizing) startDrag(node.id)}}
-          onMouseUp={() => {if (!isVisualizing) completeDrag(node.id)}}
+          onMouseDown={() => { if (!isVisualizing) startDrag(node.id) }}
+          onMouseUp={() => { if (!isVisualizing) completeDrag(node.id) }}
           isDeleting={isDeleting}
           isStart={node.number === config.startNode}
           isEnd={node.number === config.endNode}

@@ -8,7 +8,7 @@ import SvgDefs from './components/SvgDefs';
 
 const App: React.FC = () => {
   const [isVisualizing, setIsVisualizing] = useState(false);
-  const { graph, config, isDeleting, dragState, startDrag, updateTempTarget, completeDrag, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
+  const { graph, config, isDeleting, dragState, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, clearGraph, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied } = useGraph();
 
   const handleRunAlgorithm = (algorithm: AlgorithmType) => {
     setIsVisualizing(true);
@@ -49,6 +49,7 @@ const App: React.FC = () => {
           isDeleting={isDeleting}
           isVisualizing={isVisualizing}
           dragState={dragState}
+          updateEdgeWeight={updateEdgeWeight}
           startDrag={startDrag}
           updateTempTarget={updateTempTarget}
           completeDrag={completeDrag}

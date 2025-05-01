@@ -107,6 +107,11 @@
     z-index: 1;
 }
 
+.edge-container {
+    pointer-events: none;
+    /* Disable pointer events for entire edge */
+}
+
 .edge line {
     stroke: #7f8c8d;
     stroke-width: 2px;
@@ -129,4 +134,34 @@ svg {
 
 svg marker#arrowhead {
     fill: #7f8c8d;
+}
+
+.weight-circle {
+    pointer-events: auto;
+    transition: all 0.2s;
+}
+
+.weight-circle:hover {
+    stroke-width: 2px;
+    fill: #f8f9fa;
+}
+
+.weight-text {
+    font-size: 12px;
+    font-weight: bold;
+    user-select: none;
+    pointer-events: none;
+}
+
+.weight-input {
+
+    pointer-events: auto;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    border: none;
+    outline: none;
+    font-size: 12px;
+    font-weight: bold;
+    background: transparent;
 }
