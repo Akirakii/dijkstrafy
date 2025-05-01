@@ -4,6 +4,7 @@ import NodeComponent from './Node';
 import './Graph.css';
 import { DragState, Graph, GraphConfig, VisualizationState, VisualizationStateSet } from '../types/graphTypes';
 import EdgeComponent from './Edge';
+import { FaPlay } from 'react-icons/fa';
 
 interface GraphProps {
   graph: Graph;

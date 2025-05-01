@@ -56,10 +56,6 @@ const App: React.FC = () => {
           isPositionOccupied={isPositionOccupied}
         />
       </main>
-
-      <footer className="app-footer">
-        <p>Left-click: Add node | Drag between nodes: Create edge | Right-click: Delete</p>
-      </footer>
     </div>
   );
 };

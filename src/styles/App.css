@@ -2,7 +2,7 @@
 .app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .app-header {
@@ -20,9 +20,9 @@
   overflow: hidden;
 }
 
-.app-footer {
+/* .app-footer {
   padding: 0.5rem;
   background: #ecf0f1;
   text-align: center;
   font-size: 0.8rem;
-}
+} */

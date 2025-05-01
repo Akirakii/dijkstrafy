@@ -7,7 +7,7 @@ const SvgDefs = () => (
                 id="arrowhead"
                 markerWidth="10"
                 markerHeight="7"
-                refX="9"
+                refX="18"
                 refY="3.5"
                 orient="auto"
             >
