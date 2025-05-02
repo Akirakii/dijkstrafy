@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/dijkstrafy/static/css/main.ac3c8130.css",
-    "main.js": "/dijkstrafy/static/js/main.678d21ff.js",
+    "main.js": "/dijkstrafy/static/js/main.23066950.js",
     "index.html": "/dijkstrafy/index.html",
     "main.ac3c8130.css.map": "/dijkstrafy/static/css/main.ac3c8130.css.map",
-    "main.678d21ff.js.map": "/dijkstrafy/static/js/main.678d21ff.js.map"
+    "main.23066950.js.map": "/dijkstrafy/static/js/main.23066950.js.map"
   },
   "entrypoints": [
     "static/css/main.ac3c8130.css",
-    "static/js/main.678d21ff.js"
+    "static/js/main.23066950.js"
   ]
 }
