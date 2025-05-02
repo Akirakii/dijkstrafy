@@ -8,9 +8,10 @@
 
 ---
 
-## 🌐 Live Demo
+# 🌐 Live Demo 👉 [Try it out here](https://akirakii.github.io/dijkstrafy/) 👈
+![Dijkstra Demo](./public/graph-sample1.png)
 
-🔗 [Try it out here](https://akirakii.github.io/dijkstrafy/)
+
 
 Create, explore, and learn how pathfinding works in graphs! 🚀
 
@@ -38,6 +39,15 @@ Create, explore, and learn how pathfinding works in graphs! 🚀
 5. Select start and end nodes
 6. Choose an algorithm
 7. ▶ Run / ⏹ Stop / 🗑️ Clear
+
+### Visualization Colors
+
+* 🟡 **Yellow**: A node or edge that has been **visited** — meaning the algorithm has considered it while searching for the shortest path.
+* 🟢 **Green**: Part of the **final shortest path** — the actual optimal route from the start node to the end node.
+
+
+
+Even if a node is visited, it may not end up on the shortest path.
 
 ---
 
@@ -130,3 +140,5 @@ To deploy:
 npm run build
 npm run deploy
 ```
+
+---
