@@ -40,7 +40,8 @@ const EdgeComponent: React.FC<EdgeProps> = ({
   const getStateColor = () => { return VISUALIZATION_THEME[visualizationState].edge; }
 
   const handleWeightSubmit = () => {
-    const newWeight = Math.max(1, parseInt(tempWeight) || 1);
+    // const newWeight = Math.max(1, parseInt(tempWeight) || 1);
+    const newWeight =parseInt(tempWeight);
     onWeightChange(edge.id, newWeight);
     setIsEditing(false);
   };
@@ -107,7 +108,7 @@ const EdgeComponent: React.FC<EdgeProps> = ({
                   }}
                   className="weight-input"
                   onMouseDown={(e) => e.stopPropagation()}
-                  min="1"
+                  defaultValue={1}
                 />
               </div>
             </foreignObject>
