@@ -10,7 +10,7 @@
 
 ## 📚 Table of Contents
 
-- [🌐 Live Demo](#-live-demo)
+- [🌐 Live Demo](#live-demo)
 - [✨ Features](#-features)
 - [🕹️ Getting Started](#-getting-started)
   - [How to Use Dijkstrafy](#how-to-use-dijkstrafy)
