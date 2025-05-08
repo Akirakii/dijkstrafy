@@ -47,16 +47,16 @@ const GraphComponent: React.FC<GraphProps> = ({
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isVisualizing) return;
-    
+
     // Right click handling
     if (e.button === 2) {
       e.preventDefault();
-      
+
       // Get click position
       const rect = e.currentTarget.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-  
+
       // Find node at click position
       const nodeToDelete = graph.nodes.find(node => {
         const distance = Math.sqrt(
@@ -64,7 +64,7 @@ const GraphComponent: React.FC<GraphProps> = ({
         );
         return distance < 15; // Match node radius
       });
-  
+
       if (nodeToDelete) {
         // Delete immediately if clicking on node
         deleteNode(nodeToDelete.id);
@@ -74,22 +74,22 @@ const GraphComponent: React.FC<GraphProps> = ({
       }
       return;
     }
-  
+
     // Left click handling (existing code)
     if (e.button === 0) {
       const target = e.target as HTMLElement;
       if (!target?.classList?.contains('graph-container')) return;
-      
+
       const rect = e.currentTarget.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-  
+
       if (isPositionOccupied(x, y)) {
         setInvalidPosition({ x, y });
         setTimeout(() => setInvalidPosition(null), 1000);
         return;
       }
-  
+
       addNode(x, y);
     }
   };
