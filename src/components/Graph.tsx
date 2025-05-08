@@ -218,7 +218,7 @@ const [nodeBeingMoved, setNodeBeingMoved] = useState<string | null>(null);
 
   return (
     <div
-      className="graph-container"
+      className={`graph-container ${isVisualizing ? 'visualizing' : ''}`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
