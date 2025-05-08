@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useGraph } from '../hooks/useGraph';
 import NodeComponent from './Node';
 import './Graph.css';
 import { DragState, Graph, GraphConfig, VisualizationState, VisualizationStateSet } from '../types/graphTypes';
 import EdgeComponent from './Edge';
-import { FaPlay } from 'react-icons/fa';
 
 interface GraphProps {
   graph: Graph;
@@ -13,10 +11,13 @@ interface GraphProps {
   isVisualizing: boolean;
   dragState: DragState;
   visualizationStateSet: VisualizationStateSet;
+
   updateEdgeWeight: (edgeId: string, newWeight: number) => void;
   startDrag: (nodeId: string) => void;
   updateTempTarget: (x: number, y: number) => void;
   completeDrag: (targetId: string | null) => void;
+  deleteEdge: (edgeId: string) => void;
+
   addNode: (x: number, y: number) => void;
   deleteNode: (nodeId: string) => void;
   isPositionOccupied: (x: number, y: number) => boolean;
@@ -30,10 +31,13 @@ const GraphComponent: React.FC<GraphProps> = ({
   isVisualizing,
   dragState,
   visualizationStateSet,
+
   updateEdgeWeight,
   startDrag,
   updateTempTarget,
   completeDrag,
+  deleteEdge,
+
   addNode,
   deleteNode,
   setIsDeleting,
