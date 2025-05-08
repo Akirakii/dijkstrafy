@@ -439,7 +439,38 @@ export const useGraph = () => {
         });
     };
 
+    const deleteEdge = (edgeId: string) => {
+        setGraph(prev => ({
+            nodes: prev.nodes, 
+            edges: prev.edges.filter(e => e.id !== edgeId)
+        }));
+    };
+
     return {
-        graph, config, isDeleting, dragState, visualizationStateSet, isVisualizing, stopVisualization, visualizeDijkstra, visualizeBellmanFord, visualizeSPFA, updateEdgeWeight, startDrag, updateTempTarget, completeDrag, setStartNode, setEndNode, addNode, deleteNode, setIsDeleting, isPositionOccupied, clearGraph,
+        graph, 
+        config, 
+        isDeleting, 
+        dragState, 
+        visualizationStateSet, 
+        isVisualizing,
+
+        stopVisualization, 
+        visualizeDijkstra, 
+        visualizeBellmanFord, 
+        visualizeSPFA,
+
+        updateEdgeWeight, 
+        startDrag, 
+        updateTempTarget, 
+        completeDrag, 
+        deleteEdge,
+
+        setStartNode,
+        setEndNode, 
+        addNode, 
+        deleteNode, 
+        setIsDeleting, 
+        isPositionOccupied, 
+        clearGraph,
     };
 };
