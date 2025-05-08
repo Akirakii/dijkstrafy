@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NodeComponent from './Node';
 import './Graph.css';
-import { DragState, Graph, GraphConfig, VisualizationState, VisualizationStateSet } from '../types/graphTypes';
+import { DragState, Edge, Graph, GraphConfig, VisualizationState, VisualizationStateSet } from '../types/graphTypes';
 import EdgeComponent from './Edge';
 
 interface GraphProps {
@@ -45,6 +45,24 @@ const GraphComponent: React.FC<GraphProps> = ({
 }) => {
   const [invalidPosition, setInvalidPosition] = useState<{ x: number, y: number } | null>(null);
 
+  const distanceToEdge = (px: number, py: number, x1: number, y1: number, x2: number, y2: number) => {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const dpx = px - x1;
+    const dpy = py - y1;
+    const dot = dpx * dx + dpy * dy;
+    const lenSq = dx * dx + dy * dy;
+    let param = 0;
+
+    if (lenSq !== 0) {
+      param = Math.min(Math.max(dot / lenSq, 0), 1);
+    }
+
+    const xx = x1 + param * dx;
+    const yy = y1 + param * dy;
+    return Math.sqrt((px - xx) ** 2 + (py - yy) ** 2);
+  };
+
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isVisualizing) return;
 
@@ -59,17 +77,27 @@ const GraphComponent: React.FC<GraphProps> = ({
 
       // Find node at click position
       const nodeToDelete = graph.nodes.find(node => {
-        const distance = Math.sqrt(
-          Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)
-        );
-        return distance < 15; // Match node radius
+        const distance = Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2));
+        return distance < 15;
       });
 
       if (nodeToDelete) {
-        // Delete immediately if clicking on node
         deleteNode(nodeToDelete.id);
+        return;
+      }
+
+      const edgesUnderCursor = graph.edges.filter(edge => {
+        const sourceNode = graph.nodes.find(n => n.id === edge.source);
+        const targetNode = graph.nodes.find(n => n.id === edge.target);
+        if (!sourceNode || !targetNode) return false;
+
+        const distance = distanceToEdge(x, y, sourceNode.x, sourceNode.y, targetNode.x, targetNode.y);
+        return distance < 15; // Edge hit radius
+      });
+
+      if (edgesUnderCursor.length > 0) {
+        deleteEdge(edgesUnderCursor[0].id);
       } else {
-        // Enter drag-to-delete mode for empty areas
         setIsDeleting(true);
       }
       return;
