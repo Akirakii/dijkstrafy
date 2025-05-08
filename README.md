@@ -8,6 +8,27 @@
 
 ---
 
+## 📚 Table of Contents
+
+- [🌐 Live Demo](#live-demo)
+- [✨ Features](#-features)
+- [🕹️ Getting Started](#-getting-started)
+  - [How to Use Dijkstrafy](#how-to-use-dijkstrafy)
+  - [Visualization Colors](#visualization-colors)
+- [🧠 Core Concepts](#-core-concepts)
+  - [What is a Graph?](#what-is-a-graph)
+  - [What Are Negative Weights?](#what-are-negative-weights)
+  - [Which Algorithms Support Negative Weights?](#which-algorithms-support-negative-weights)
+- [🔍 Algorithms Overview](#-algorithms-overview)
+  - [Dijkstra’s Algorithm](#dijkstras-algorithm)
+  - [Bellman-Ford](#bellman-ford)
+  - [SPFA (Shortest Path Faster Algorithm)](#spfa-shortest-path-faster-algorithm)
+- [🌍 Why Pathfinding Matters](#-why-pathfinding-matters)
+- [🛠 Tech Stack](#-tech-stack)
+- [🚀 Local Setup](#-local-setup)
+
+---
+
 # 🌐 Live Demo 👉 [Try it out here](https://akirakii.github.io/dijkstrafy/) 👈
 ![Dijkstra Demo](./public/graph-sample1.png)
 
