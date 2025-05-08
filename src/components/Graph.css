@@ -174,13 +174,17 @@ svg marker#arrowhead {
     cursor: not-allowed;
 }
 
+.graph-container.visualizing:hover {
+    cursor: not-allowed;
+}
+
 .graph-container.visualizing .weight-circle:hover {
     cursor: not-allowed;
 }
 
 .graph-container.alt-key-active {
     cursor: grab;
-  }
+}
 
 .graph-container.moving-node:active {
     cursor: grabbing;
