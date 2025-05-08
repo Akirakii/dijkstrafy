@@ -28,6 +28,15 @@
   text-decoration: underline;
 }
 
+.guide {
+  position: absolute;
+  bottom: 2px;
+  left: 0px;
+  color: #09001f;
+}
+
+
+
 /* .app-footer {
   padding: 0.5rem;
   background: #ecf0f1;

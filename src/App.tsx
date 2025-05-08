@@ -88,6 +88,17 @@ const App: React.FC = () => {
           updateNodePosition={updateNodePosition}
         />
       </main>
+
+      <div className="guide">
+        <ul>
+          <li>🖱️ <strong>Left-click</strong> to create a node</li>
+          <li>🔗 <strong>Drag</strong> from one node to another to create a directed edge</li>
+          <li>✏️ <strong>Click</strong> on edge weight to edit it</li>
+          <li>🗑️ <strong>Right-click & hold</strong> to delete nodes and edges</li>
+          <li>🧲 <strong>Alt + Drag</strong> to move nodes</li>
+        </ul>
+      </div>
+
     </div>
   );
 };
