@@ -19,7 +19,6 @@
     border-radius: 50%;
     transform: translate(-50%, -50%);
     /* border: 2px solid #2980b9; */
-    cursor: move;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -177,4 +176,12 @@ svg marker#arrowhead {
 
 .graph-container.visualizing .weight-circle:hover {
     cursor: not-allowed;
+}
+
+.graph-container.alt-key-active {
+    cursor: grab;
+  }
+
+.graph-container.moving-node:active {
+    cursor: grabbing;
 }
