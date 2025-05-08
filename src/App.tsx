@@ -32,6 +32,7 @@ const App: React.FC = () => {
     deleteNode,
     setIsDeleting,
     isPositionOccupied,
+    updateNodePosition,
     clearGraph,
   } = useGraph();
 
@@ -84,6 +85,7 @@ const App: React.FC = () => {
           deleteNode={deleteNode}
           setIsDeleting={setIsDeleting}
           isPositionOccupied={isPositionOccupied}
+          updateNodePosition={updateNodePosition}
         />
       </main>
     </div>

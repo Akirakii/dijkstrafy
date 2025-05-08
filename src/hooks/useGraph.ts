@@ -30,6 +30,15 @@ export const useGraph = () => {
         });
     };
 
+    const updateNodePosition = (nodeId: string, x: number, y: number) => {
+        setGraph(prev => ({
+          ...prev,
+          nodes: prev.nodes.map(node => 
+            node.id === nodeId ? { ...node, x, y } : node
+          )
+        }));
+      };
+
     const visualizeDijkstra = async () => {
         // 1. Initialize tracking
         visualizationActive.current = true;
@@ -471,6 +480,7 @@ export const useGraph = () => {
         deleteNode, 
         setIsDeleting, 
         isPositionOccupied, 
+        updateNodePosition,
         clearGraph,
     };
 };

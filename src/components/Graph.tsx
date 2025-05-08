@@ -22,6 +22,7 @@ interface GraphProps {
   deleteNode: (nodeId: string) => void;
   isPositionOccupied: (x: number, y: number) => boolean;
   setIsDeleting: (val: boolean) => void;
+  updateNodePosition: (nodeId: string, x: number, y: number) => void;
 }
 
 const GraphComponent: React.FC<GraphProps> = ({
@@ -42,8 +43,11 @@ const GraphComponent: React.FC<GraphProps> = ({
   deleteNode,
   setIsDeleting,
   isPositionOccupied,
+  updateNodePosition
 }) => {
   const [invalidPosition, setInvalidPosition] = useState<{ x: number, y: number } | null>(null);
+  const [isMovingNode, setIsMovingNode] = useState(false);
+const [nodeBeingMoved, setNodeBeingMoved] = useState<string | null>(null);
 
   const distanceToEdge = (px: number, py: number, x1: number, y1: number, x2: number, y2: number) => {
     const dx = x2 - x1;
@@ -65,6 +69,25 @@ const GraphComponent: React.FC<GraphProps> = ({
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isVisualizing) return;
+
+    if (e.button === 0 && e.altKey) {  // Button 1 is middle mouse
+      e.preventDefault();
+      
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+  
+      const nodeToMove = graph.nodes.find(node => {
+        const distance = Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2));
+        return distance < 15;
+      });
+  
+      if (nodeToMove) {
+        setIsMovingNode(true);
+        setNodeBeingMoved(nodeToMove.id);
+        return;
+      }
+    }
 
     // Right click handling
     if (e.button === 2) {
@@ -124,11 +147,23 @@ const GraphComponent: React.FC<GraphProps> = ({
 
   const handleMouseUp = () => {
     setIsDeleting(false);
+    setIsMovingNode(false);
+    setNodeBeingMoved(null);
     completeDrag(null);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (isVisualizing) return;
+
+    if (isMovingNode && nodeBeingMoved) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      updateNodePosition(nodeBeingMoved, x, y);
+      return;
+    }
+
     if (isDeleting) {
       const rect = e.currentTarget.getBoundingClientRect();
       const x = e.clientX - rect.left;
