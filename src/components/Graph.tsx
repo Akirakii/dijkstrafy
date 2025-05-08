@@ -145,6 +145,17 @@ const GraphComponent: React.FC<GraphProps> = ({
       if (nodeToDelete) {
         deleteNode(nodeToDelete.id);
       }
+
+      const edgesToDelete = graph.edges.filter(edge => {
+        const sourceNode = graph.nodes.find(n => n.id === edge.source);
+        const targetNode = graph.nodes.find(n => n.id === edge.target);
+        if (!sourceNode || !targetNode) return false;
+
+        const distance = distanceToEdge(x, y, sourceNode.x, sourceNode.y, targetNode.x, targetNode.y);
+        return distance < 5;
+      });
+
+      edgesToDelete.forEach(edge => deleteEdge(edge.id));
     }
 
     if (dragState.sourceId) {
