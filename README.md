@@ -56,10 +56,11 @@ Create, explore, and learn how pathfinding works in graphs! 🚀
 1. **Left-click** to create a node
 2. **Drag** from one node to another to create a directed edge
 3. **Click on edge weight** to edit it
-4. **Right-click & hold** a node to delete it
-5. Select start and end nodes
-6. Choose an algorithm
-7. ▶ Run / ⏹ Stop / 🗑️ Clear
+4. **Right-click & hold** deletes nodes and edges
+5. **Alt + Drag** to move nodes
+6. Select start and end nodes
+7. Choose an algorithm
+8. ▶ Run / ⏹ Stop / 🗑️ Clear
 
 ### Visualization Colors
 
