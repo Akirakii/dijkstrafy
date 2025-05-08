@@ -43,23 +43,49 @@ const GraphComponent: React.FC<GraphProps> = ({
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isVisualizing) return;
-    if (e.button === 2) { // Right click
-      setIsDeleting(true);
+    
+    // Right click handling
+    if (e.button === 2) {
       e.preventDefault();
-    }
-    if (e.button == 0) {
-      const target = e.target as HTMLElement;
-      if (!target?.classList?.contains('graph-container')) return;
+      
+      // Get click position
       const rect = e.currentTarget.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-
+  
+      // Find node at click position
+      const nodeToDelete = graph.nodes.find(node => {
+        const distance = Math.sqrt(
+          Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)
+        );
+        return distance < 15; // Match node radius
+      });
+  
+      if (nodeToDelete) {
+        // Delete immediately if clicking on node
+        deleteNode(nodeToDelete.id);
+      } else {
+        // Enter drag-to-delete mode for empty areas
+        setIsDeleting(true);
+      }
+      return;
+    }
+  
+    // Left click handling (existing code)
+    if (e.button === 0) {
+      const target = e.target as HTMLElement;
+      if (!target?.classList?.contains('graph-container')) return;
+      
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+  
       if (isPositionOccupied(x, y)) {
         setInvalidPosition({ x, y });
-        setTimeout(() => setInvalidPosition(null), 1000); // Clear after 1sec
+        setTimeout(() => setInvalidPosition(null), 1000);
         return;
       }
-
+  
       addNode(x, y);
     }
   };
